@@ -1,0 +1,302 @@
+[
+    {
+        "id": 1,
+        "summary": "Python Developer Interview",
+        "desc": "1st Round Technical Interview",
+        "start": "2025-03-05T10:00:00+05:30",
+        "end": "2025-03-05T11:00:00+05:30",
+        "attendees": null,
+        "status": null,
+        "comment": null,
+        "score": {
+            "P": 8
+        },
+        "link": "https://meet.google.com/abc-defg-hij",
+        "user_det": {
+            "id": 1,
+            "question_score": null,
+            "status": null,
+            "candidate": {
+                "id": 1,
+                "candidate_firstName": "John",
+                "candidate_lastName": "Doe",
+                "candidateGender": "male",
+                "candidateComment": "",
+                "candidate_email": "johndoe@example.com"
+            },
+            "handled_by": {
+                "id": 3,
+                "last_login": null,
+                "userEmail": "geetha@example.com",
+                "username": "geetha_hr",
+                "firstName": "Geetha",
+                "lastName": "HR",
+                "userRole": "hr_employee"
+            },
+            "job_id": {
+                "id": 11,
+                "jobRequest_Title": "Python Developer",
+                "jobRequest_Role": "software engineer",
+                "jobRequest_KeySkills": "Python, Django, Flask",
+                "jobRequest_Description": "We are looking for an experienced Python developer"
+            }
+        },
+        "job_id": {
+            "id": 11,
+            "jobRequest_Title": "Python Developer",
+            "jobRequest_Role": "software engineer",
+            "jobRequest_KeySkills": "Python, Django, Flask",
+            "jobRequest_Description": "We are looking for an experienced Python developer"
+        }
+    },
+    {
+        "id": 2,
+        "summary": "Python Developer Interview",
+        "desc": "2nd Round Technical Interview",
+        "start": "2025-03-07T10:00:00+05:30",
+        "end": "2025-03-07T11:00:00+05:30",
+        "attendees": null,
+        "status": null,
+        "comment": null,
+        "score": {
+            "p": 7
+        },
+        "link": "https://meet.google.com/abc-defg-hij",
+        "user_det": {
+            "id": 2,
+            "question_score": null,
+            "status": null,
+            "candidate": {
+                "id": 2,
+                "candidate_firstName": "Jane",
+                "candidate_lastName": "Smith",
+                "candidateGender": "female",
+                "candidateComment": "",
+                "candidate_email": "janesmith@example.com"
+            },
+            "handled_by": {
+                "id": 3,
+                "last_login": null,
+                "userEmail": "geetha@example.com",
+                "username": "geetha_hr",
+                "firstName": "Geetha",
+                "lastName": "HR",
+                "userRole": "hr_employee"
+            },
+            "job_id": {
+                "id": 11,
+                "jobRequest_Title": "Python Developer",
+                "jobRequest_Role": "software engineer",
+                "jobRequest_KeySkills": "Python, Django, Flask",
+                "jobRequest_Description": "We are looking for an experienced Python developer"
+            }
+        },
+        "job_id": {
+            "id": 11,
+            "jobRequest_Title": "Python Developer",
+            "jobRequest_Role": "software engineer",
+            "jobRequest_KeySkills": "Python, Django, Flask",
+            "jobRequest_Description": "We are looking for an experienced Python developer"
+        }
+    },
+    {
+        "id": 3,
+        "summary": "Python Developer Interview",
+        "desc": "Final Round with CTO",
+        "start": "2025-03-09T10:00:00+05:30",
+        "end": "2025-03-09T11:00:00+05:30",
+        "attendees": null,
+        "status": null,
+        "comment": null,
+        "score": {
+            "o": 6
+        },
+        "link": "https://meet.google.com/abc-defg-hij",
+        "user_det": {
+            "id": 3,
+            "question_score": null,
+            "status": null,
+            "candidate": {
+                "id": 3,
+                "candidate_firstName": "Robert",
+                "candidate_lastName": "Johnson",
+                "candidateGender": "male",
+                "candidateComment": "",
+                "candidate_email": "robert@example.com"
+            },
+            "handled_by": {
+                "id": 3,
+                "last_login": null,
+                "userEmail": "geetha@example.com",
+                "username": "geetha_hr",
+                "firstName": "Geetha",
+                "lastName": "HR",
+                "userRole": "hr_employee"
+            },
+            "job_id": {
+                "id": 11,
+                "jobRequest_Title": "Python Developer",
+                "jobRequest_Role": "software engineer",
+                "jobRequest_KeySkills": "Python, Django, Flask",
+                "jobRequest_Description": "We are looking for an experienced Python developer"
+            }
+        },
+        "job_id": {
+            "id": 11,
+            "jobRequest_Title": "Python Developer",
+            "jobRequest_Role": "software engineer",
+            "jobRequest_KeySkills": "Python, Django, Flask",
+            "jobRequest_Description": "We are looking for an experienced Python developer"
+        }
+    },
+    {
+        "id": 4,
+        "summary": "Python Developer Interview",
+        "desc": "Technical Assessment",
+        "start": "2025-03-05T10:00:00+05:30",
+        "end": "2025-03-05T11:00:00+05:30",
+        "attendees": null,
+        "status": null,
+        "comment": null,
+        "score": {
+            "o": 9
+        },
+        "link": "https://meet.google.com/abc-defg-hij",
+        "user_det": {
+            "id": 4,
+            "question_score": null,
+            "status": null,
+            "candidate": {
+                "id": 4,
+                "candidate_firstName": "Michael",
+                "candidate_lastName": "Brown",
+                "candidateGender": "male",
+                "candidateComment": "",
+                "candidate_email": "michael@example.com"
+            },
+            "handled_by": {
+                "id": 3,
+                "last_login": null,
+                "userEmail": "geetha@example.com",
+                "username": "geetha_hr",
+                "firstName": "Geetha",
+                "lastName": "HR",
+                "userRole": "hr_employee"
+            },
+            "job_id": {
+                "id": 11,
+                "jobRequest_Title": "Python Developer",
+                "jobRequest_Role": "software engineer",
+                "jobRequest_KeySkills": "Python, Django, Flask",
+                "jobRequest_Description": "We are looking for an experienced Python developer"
+            }
+        },
+        "job_id": {
+            "id": 11,
+            "jobRequest_Title": "Python Developer",
+            "jobRequest_Role": "software engineer",
+            "jobRequest_KeySkills": "Python, Django, Flask",
+            "jobRequest_Description": "We are looking for an experienced Python developer"
+        }
+    },
+    {
+        "id": 5,
+        "summary": "Python Developer Interview",
+        "desc": "HR Round",
+        "start": "2025-03-11T10:00:00+05:30",
+        "end": "2025-03-11T11:00:00+05:30",
+        "attendees": null,
+        "status": null,
+        "comment": null,
+        "score": {
+            "o": 8
+        },
+        "link": "https://meet.google.com/abc-defg-hij",
+        "user_det": {
+            "id": 5,
+            "question_score": null,
+            "status": null,
+            "candidate": {
+                "id": 5,
+                "candidate_firstName": "Emily",
+                "candidate_lastName": "Davis",
+                "candidateGender": "female",
+                "candidateComment": "",
+                "candidate_email": "emily@example.com"
+            },
+            "handled_by": {
+                "id": 3,
+                "last_login": null,
+                "userEmail": "geetha@example.com",
+                "username": "geetha_hr",
+                "firstName": "Geetha",
+                "lastName": "HR",
+                "userRole": "hr_employee"
+            },
+            "job_id": {
+                "id": 11,
+                "jobRequest_Title": "Python Developer",
+                "jobRequest_Role": "software engineer",
+                "jobRequest_KeySkills": "Python, Django, Flask",
+                "jobRequest_Description": "We are looking for an experienced Python developer"
+            }
+        },
+        "job_id": {
+            "id": 11,
+            "jobRequest_Title": "Python Developer",
+            "jobRequest_Role": "software engineer",
+            "jobRequest_KeySkills": "Python, Django, Flask",
+            "jobRequest_Description": "We are looking for an experienced Python developer"
+        }
+    },
+    {
+        "id": 6,
+        "summary": "Django Developer Interview",
+        "desc": "Technical Round",
+        "start": "2025-03-05T14:00:00+05:30",
+        "end": "2025-03-05T15:00:00+05:30",
+        "attendees": null,
+        "status": null,
+        "comment": null,
+        "score": {
+            "o": 7
+        },
+        "link": "https://meet.google.com/abc-defg-hij",
+        "user_det": {
+            "id": 6,
+            "question_score": null,
+            "status": null,
+            "candidate": {
+                "id": 6,
+                "candidate_firstName": "David",
+                "candidate_lastName": "Wilson",
+                "candidateGender": "male",
+                "candidateComment": "",
+                "candidate_email": "david@example.com"
+            },
+            "handled_by": {
+                "id": 3,
+                "last_login": null,
+                "userEmail": "geetha@example.com",
+                "username": "geetha_hr",
+                "firstName": "Geetha",
+                "lastName": "HR",
+                "userRole": "hr_employee"
+            },
+            "job_id": {
+                "id": 12,
+                "jobRequest_Title": "Django Developer",
+                "jobRequest_Role": "software engineer",
+                "jobRequest_KeySkills": "Python, Django, REST API",
+                "jobRequest_Description": "We are looking for an experienced Django developer"
+            }
+        },
+        "job_id": {
+            "id": 12,
+            "jobRequest_Title": "Django Developer",
+            "jobRequest_Role": "software engineer",
+            "jobRequest_KeySkills": "Python, Django, REST API",
+            "jobRequest_Description": "We are looking for an experienced Django developer"
+        }
+    }
+]

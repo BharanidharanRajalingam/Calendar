@@ -1,0 +1,59 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: auto
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: auto
+}
+
+.calendar-container {
+  flex: 1;
+  width: 100%;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: auto;
+}
+
+.calendar-day-grid,
+.calendar-week-grid,
+.calendar-month-grid,
+.calendar-year-grid {
+  min-height: 100%;
+}
+
+/* Make sure the calendar takes up the full height */
+.calendar-grid {
+  height: 100%;
+}
+
+/* Ensure the day view takes up the full height */
+.calendar-day-column {
+  height: 100%;
+}
+
+/* Ensure the week view takes up the full height */
+.calendar-week-container {
+  height: 100%;
+}
+
+/* Ensure the month view takes up the full height */
+.calendar-month-container {
+  height: 100%;
+}
+
+/* Ensure the year view takes up the full height */
+.calendar-year-container {
+  height: 100%;
+}
