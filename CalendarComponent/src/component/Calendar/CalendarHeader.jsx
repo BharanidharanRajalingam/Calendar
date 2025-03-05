@@ -67,12 +67,12 @@ const CalendarHeader = ({
         {/* Day number display as shown in screenshots */}
         <div style={{ 
           padding: '5px 15px', 
-          backgroundColor: '#f8f9fa', 
           borderRadius: '4px',
           marginRight: '15px',
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           fontWeight: 'bold',
-          color: '#1a73e8'
+          color: '#1a73e8',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
         }}>
           {dayNumber}
         </div>

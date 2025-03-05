@@ -8,7 +8,7 @@ import { formatTime } from './utils/dateUtils';
 const CalendarEvent = ({ event, onClick }) => {
   const handleClick = (e) => {
     e.stopPropagation(); // Prevent triggering parent click handlers
-    onClick(event);
+    onClick(e);
   };
 
   // Determine if this is a Python or Django developer event
@@ -35,12 +35,9 @@ const CalendarEvent = ({ event, onClick }) => {
       className="calendar-event" 
       onClick={handleClick}
       style={{ 
-        backgroundColor: backgroundColor,
-        borderLeft: '4px solid ' + (backgroundColor === '#1a73e8' ? '#0d47a1' : '#0b4f9c'),
+        borderLeft: '15px solid ' + (backgroundColor === '#1a73e8' ? '#0d47a1' : '#0063BE'),
         padding: '6px 8px',
         marginBottom: '4px',
-        borderRadius: '0px',
-        boxShadow: 'none'
       }}
     >
       <div className="calendar-event-title" style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{event.summary}</div>
@@ -74,10 +71,10 @@ const CalendarEvent = ({ event, onClick }) => {
       </div>
       
       {/* Edit and delete icons as shown in screenshots */}
-      <div style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '5px' }}>
+      {/* <div style={{ position: 'absolute', top: '5px', right: '5px', display: 'flex', gap: '5px' }}>
         <span style={{ cursor: 'pointer', fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)' }}>✎</span>
         <span style={{ cursor: 'pointer', fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)' }}>🗑</span>
-      </div>
+      </div> */}
     </div>
   );
 };

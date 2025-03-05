@@ -66,7 +66,7 @@ const CalendarEventList = ({ date, events, onEventClick, onClose }) => {
                 className="event-list-item"
                 onClick={() => onEventClick(event)}
                 style={{ 
-                  borderLeft: '4px solid ' + backgroundColor,
+                  borderLeft: '15px solid ' + backgroundColor,
                   padding: '12px 16px',
                   marginBottom: '8px',
                   backgroundColor: '#f8f9fa',
@@ -103,8 +103,8 @@ const CalendarEventList = ({ date, events, onEventClick, onClose }) => {
                 
                 {/* Edit and delete icons as shown in screenshots */}
                 <div style={{ position: 'absolute', top: '12px', right: '12px', display: 'flex', gap: '10px' }}>
-                  <span style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#666' }}>✎</span>
-                  <span style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#666' }}>🗑</span>
+                  <span style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#444444' }}>✎</span>
+                  <span style={{ cursor: 'pointer', fontSize: '0.9rem', color: 'red' }}>🗑</span>
                 </div>
               </div>
             );

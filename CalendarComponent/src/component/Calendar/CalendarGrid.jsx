@@ -80,7 +80,10 @@ const CalendarGrid = ({
                       <div key={event.id} style={{ marginLeft: '20px' }}>
                         <CalendarEvent 
                           event={event} 
-                          onClick={onEventClick} 
+                          onClick={() => {
+                            // Always show the list of events when clicking on an event
+                            onDateClick(currentDate, index);
+                          }} 
                         />
                       </div>
                     ))}
@@ -179,7 +182,10 @@ const CalendarGrid = ({
                           <CalendarEvent 
                             key={event.id} 
                             event={event} 
-                            onClick={onEventClick} 
+                            onClick={() => {
+                              // Always show the list of events when clicking on an event
+                              onDateClick(day, hourIndex);
+                            }} 
                           />
                         ))}
                         
@@ -234,13 +240,16 @@ const CalendarGrid = ({
                 
                 {/* Display events or event count */}
                 {eventCount > 0 && (
-                  <div>
+                  <div style={{ position: 'relative' }}>
                     {/* Always show the first event if there is one */}
                     {dayEvents.length > 0 && (
                       <CalendarEvent 
                         key={dayEvents[0].id} 
                         event={dayEvents[0]} 
-                        onClick={onEventClick} 
+                        onClick={() => {
+                          // Always show the list of events when clicking on an event
+                          onDateClick(date);
+                        }} 
                       />
                     )}
                     
@@ -337,7 +346,19 @@ const CalendarGrid = ({
                         fontSize: '0.8rem',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        cursor: 'pointer'
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Create a date for this event
+                        const eventDate = new Date(event.start);
+                        // Set the current date to this event's date
+                        const newDate = new Date(currentDate);
+                        newDate.setMonth(month.getMonth());
+                        newDate.setDate(eventDate.getDate());
+                        // Show the list of events for this date
+                        onDateClick(newDate);
                       }}
                     >
                       {event.summary}
@@ -346,7 +367,23 @@ const CalendarGrid = ({
                 </div>
                 
                 {monthEventCount > displayEvents.length && (
-                  <div style={{ textAlign: 'center', marginTop: '5px', color: '#666', fontSize: '0.9rem' }}>
+                  <div 
+                    style={{ 
+                      textAlign: 'center', 
+                      marginTop: '5px', 
+                      color: '#666', 
+                      fontSize: '0.9rem',
+                      cursor: 'pointer'
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Set the current date to this month
+                      const newDate = new Date(currentDate);
+                      newDate.setMonth(month.getMonth());
+                      // Show the month view for this month
+                      onDateClick(newDate);
+                    }}
+                  >
                     +{monthEventCount - displayEvents.length} more
                   </div>
                 )}
