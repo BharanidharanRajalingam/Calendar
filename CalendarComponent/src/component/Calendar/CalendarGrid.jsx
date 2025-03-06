@@ -38,10 +38,95 @@ const CalendarGrid = ({
     }
   };
 
+  // Helper function to calculate event position and height
+  const calculateEventStyles = (event) => {
+    const startTime = new Date(event.start);
+    const endTime = new Date(event.end);
+    
+    // Calculate position from top (minutes from the start of the hour)
+    const hourHeight = 86; // Height of each hour cell in pixels
+    const startHour = startTime.getHours();
+    const startMinutes = startTime.getMinutes();
+    const topPosition = (startMinutes / 60) * hourHeight;
+    
+    // Calculate height based on duration
+    const durationMs = endTime - startTime;
+    const durationMinutes = durationMs / (1000 * 60);
+    const height = (durationMinutes / 60) * hourHeight;
+    
+    // Calculate if event spans multiple hours
+    const endHour = endTime.getHours();
+    const isMultiHour = endHour > startHour || 
+                        (endHour === startHour && endTime.getMinutes() > startTime.getMinutes() + 45);
+    
+    return {
+      top: topPosition,
+      height: Math.max(height, 25), // Minimum height of 25px
+      isMultiHour,
+      startHour,
+      endHour
+    };
+  };
+
+  // Helper function to handle overlapping events
+  const handleOverlappingEvents = (events) => {
+    if (!events || events.length <= 1) return events.map(e => ({ ...e, width: '95%', left: '0%' }));
+    
+    // Sort events by start time
+    const sortedEvents = [...events].sort((a, b) => new Date(a.start) - new Date(b.start));
+    
+    // Group overlapping events
+    const overlappingGroups = [];
+    let currentGroup = [sortedEvents[0]];
+    
+    for (let i = 1; i < sortedEvents.length; i++) {
+      const currentEvent = sortedEvents[i];
+      const previousEvent = sortedEvents[i - 1];
+      
+      const currentStart = new Date(currentEvent.start);
+      const previousEnd = new Date(previousEvent.end);
+      
+      if (currentStart < previousEnd) {
+        // Events overlap, add to current group
+        currentGroup.push(currentEvent);
+      } else {
+        // No overlap, start a new group
+        overlappingGroups.push([...currentGroup]);
+        currentGroup = [currentEvent];
+      }
+    }
+    
+    // Add the last group
+    if (currentGroup.length > 0) {
+      overlappingGroups.push(currentGroup);
+    }
+    
+    // Calculate width and position for each event in each group
+    const processedEvents = [];
+    
+    overlappingGroups.forEach(group => {
+      const groupSize = group.length;
+      const eventWidth = 95 / groupSize; // 95% divided by number of events
+      
+      group.forEach((event, index) => {
+        processedEvents.push({
+          ...event,
+          width: `${eventWidth}%`,
+          left: `${index * eventWidth}%`
+        });
+      });
+    });
+    
+    return processedEvents;
+  };
+
   // Render the day view
   const renderDayView = () => {
     const hours = getHoursInDay();
     const eventsForDay = getEventsForDate(events, currentDate);
+    
+    // Process events for time-based positioning
+    const processedEvents = handleOverlappingEvents(eventsForDay);
 
     return (
       <div className="calendar-day-grid">
@@ -54,14 +139,11 @@ const CalendarGrid = ({
         </div>
         <div className="calendar-day-column">
           {hours.map((hour, index) => {
-            // Filter events that occur during this hour
-            const hourEvents = eventsForDay.filter(event => {
-              const eventHour = new Date(event.start).getHours();
-              return eventHour === index;
+            // Filter events that start or span this hour
+            const hourEvents = processedEvents.filter(event => {
+              const { startHour, endHour, isMultiHour } = calculateEventStyles(event);
+              return startHour === index || (isMultiHour && index > startHour && index <= endHour);
             });
-
-            // Check if there are multiple events at this time
-            const hasMultipleEvents = hourEvents.length > 1;
 
             return (
               <div 
@@ -69,39 +151,38 @@ const CalendarGrid = ({
                 className="calendar-day-cell"
                 onClick={() => onDateClick(currentDate, index)}
                 style={{ 
-                  backgroundColor: hourEvents.length > 0 && hourEvents.length <= 1 ? 'rgba(26, 115, 232, 0.1)' : 'transparent',
+                  backgroundColor: 'transparent',
                   position: 'relative'
                 }}
               >
-                {hourEvents.length > 0 && (
-                  <div style={{ position: 'relative' }}>
-                    {/* Display first event */}
-                    {hourEvents.slice(0, 1).map(event => (
-                      <div key={event.id} style={{ marginLeft: '20px' }}>
-                        <CalendarEvent 
-                          event={event} 
-                          onClick={() => {
-                            // Always show the list of events when clicking on an event
-                            onDateClick(currentDate, index);
-                          }} 
-                        />
-                      </div>
-                    ))}
+                {/* Container for time-based positioned events */}
+                <div className="time-based-event-container">
+                  {hourEvents.map(event => {
+                    const { top, height, isMultiHour, startHour } = calculateEventStyles(event);
                     
-                    {/* Display count for multiple events */}
-                    {hasMultipleEvents && (
-                      <div 
-                        className="calendar-event-count"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                    // Only render events that start in this hour
+                    if (startHour !== index) return null;
+                    
+                    return (
+                      <CalendarEvent 
+                        key={event.id}
+                        event={event} 
+                        onClick={() => {
                           onDateClick(currentDate, index);
                         }}
-                      >
-                        {hourEvents.length}
-                      </div>
-                    )}
-                  </div>
-                )}
+                        eventCount={hourEvents.length > 1 ? hourEvents.length : null}
+                        isTimeBasedPositioning={true}
+                        style={{
+                          top: `${top}px`,
+                          height: `${height}px`,
+                          padding: '4px 8px'
+                        }}
+                        width={event.width}
+                        left={event.left}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             );
           })}
@@ -115,13 +196,12 @@ const CalendarGrid = ({
     const weekDays = getDatesInWeek(currentDate);
     const hours = getHoursInDay();
     
-    // Format the date range for the header
-    const startDate = weekDays[0];
-    const endDate = weekDays[weekDays.length - 1];
-    const formattedStartDate = startDate.getDate();
-    const formattedEndDate = endDate.getDate();
-    const formattedMonth = startDate.toLocaleDateString('en-US', { month: 'long' });
-    const formattedYear = startDate.getFullYear();
+    // Process events for each day
+    const processedEventsByDay = {};
+    weekDays.forEach(day => {
+      const dayEvents = getEventsForDate(events, day);
+      processedEventsByDay[day.toISOString()] = handleOverlappingEvents(dayEvents);
+    });
 
     return (
       <div className="calendar-week-container">
@@ -132,7 +212,7 @@ const CalendarGrid = ({
           {/* Day headers */}
           {weekDays.map((day, index) => {
             const dayNum = day.getDate();
-            const dayName = day.toLocaleDateString('en-US', { weekday: 'short' });
+            const dayName = day.toLocaleDateString('en-US', { weekday: 'long' });
             const monthName = day.toLocaleDateString('en-US', { month: 'short' });
             
             return (
@@ -155,15 +235,14 @@ const CalendarGrid = ({
               </div>
               
               {weekDays.map((day, dayIndex) => {
-                // Filter events for this day and hour
-                const dayEvents = getEventsForDate(events, day);
-                const hourEvents = dayEvents.filter(event => {
-                  const eventHour = new Date(event.start).getHours();
-                  return eventHour === hourIndex;
-                });
+                const dayKey = day.toISOString();
+                const dayEvents = processedEventsByDay[dayKey] || [];
                 
-                // Check if there are multiple events at this time
-                const hasMultipleEvents = hourEvents.length > 1;
+                // Filter events that start or span this hour
+                const hourEvents = dayEvents.filter(event => {
+                  const { startHour, endHour, isMultiHour } = calculateEventStyles(event);
+                  return startHour === hourIndex || (isMultiHour && hourIndex > startHour && hourIndex <= endHour);
+                });
 
                 return (
                   <div 
@@ -171,32 +250,38 @@ const CalendarGrid = ({
                     className="calendar-week-cell"
                     onClick={() => onDateClick(day, hourIndex)}
                     style={{ 
-                      backgroundColor: hourEvents.length > 0 && hourEvents.length <= 1 ? 'rgba(26, 115, 232, 0.1)' : 'transparent',
+                      backgroundColor: 'transparent',
                       position: 'relative'
                     }}
                   >
-                    {hourEvents.length > 0 && (
-                      <div style={{ position: 'relative' }}>
-                        {/* Display first event */}
-                        {hourEvents.slice(0, 1).map(event => (
+                    {/* Container for time-based positioned events */}
+                    <div className="time-based-event-container">
+                      {hourEvents.map(event => {
+                        const { top, height, isMultiHour, startHour } = calculateEventStyles(event);
+                        
+                        // Only render events that start in this hour
+                        if (startHour !== hourIndex) return null;
+                        
+                        return (
                           <CalendarEvent 
-                            key={event.id} 
+                            key={event.id}
                             event={event} 
                             onClick={() => {
-                              // Always show the list of events when clicking on an event
                               onDateClick(day, hourIndex);
-                            }} 
+                            }}
+                            eventCount={hourEvents.length > 1 ? hourEvents.length : null}
+                            isTimeBasedPositioning={true}
+                            style={{
+                              top: `${top}px`,
+                              height: `${height}px`,
+                              padding: '4px 8px'
+                            }}
+                            width={event.width}
+                            left={event.left}
                           />
-                        ))}
-                        
-                        {/* Display count for multiple events */}
-                        {hasMultipleEvents && (
-                          <div className="calendar-event-count">
-                            {hourEvents.length}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                        );
+                      })}
+                    </div>
                   </div>
                 );
               })}
@@ -249,22 +334,12 @@ const CalendarGrid = ({
                         onClick={() => {
                           // Always show the list of events when clicking on an event
                           onDateClick(date);
-                        }} 
+                        }}
+                        eventCount={eventCount}
                       />
                     )}
                     
-                    {/* If there are multiple events, show a count */}
-                    {eventCount > 1 && (
-                      <div 
-                        className="calendar-event-count"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDateClick(date);
-                        }}
-                      >
-                        {eventCount}
-                      </div>
-                    )}
+                    {/* Removed duplicate count display */}
                   </div>
                 )}
               </div>
@@ -306,8 +381,12 @@ const CalendarGrid = ({
               }
             }
             
-            // Get up to 3 events to display
-            const displayEvents = monthEvents.slice(0, 3);
+            // Get up to 2 events to display as requested
+            const displayEvents = monthEvents.slice(0, 2);
+            
+            // Check if this is the current month
+            const isCurrentMonth = new Date().getMonth() === month.getMonth() && 
+                                  new Date().getFullYear() === month.getFullYear();
 
             return (
               <div 
@@ -320,16 +399,23 @@ const CalendarGrid = ({
                   onDateClick(newDate);
                 }}
                 style={{ 
-                  padding: '15px',
-                  border: '1px solid #e0e0e0',
+                  padding: '10px',
+                  border: isCurrentMonth ? '2px solid #1a73e8' : '1px solid #e0e0e0',
                   borderRadius: '8px',
                   boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                   display: 'flex',
                   flexDirection: 'column',
-                  height: '100%'
+                  height: '100%',
+                  backgroundColor: isCurrentMonth ? '#f8fbff' : '#fff'
                 }}
               >
-                <div className="calendar-month-name" style={{ fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '10px', color: '#1a73e8' }}>
+                <div className="calendar-month-name" style={{ 
+                  fontWeight: 'bold', 
+                  fontSize: '1rem', 
+                  marginBottom: '5px', 
+                  color: isCurrentMonth ? '#1a73e8' : '#333',
+                  padding: '5px 0'
+                }}>
                   {month.toLocaleDateString('en-US', { month: 'long' })}
                 </div>
                 
@@ -340,10 +426,10 @@ const CalendarGrid = ({
                       style={{ 
                         backgroundColor: '#1a73e8',
                         color: 'white',
-                        padding: '4px 8px',
-                        marginBottom: '5px',
+                        padding: '6px 10px',
+                        marginBottom: '8px',
                         borderRadius: '4px',
-                        fontSize: '0.8rem',
+                        fontSize: '12px',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
@@ -370,21 +456,25 @@ const CalendarGrid = ({
                   <div 
                     style={{ 
                       textAlign: 'center', 
-                      marginTop: '5px', 
-                      color: '#666', 
+                      marginTop: '10px', 
+                      color: '#1a73e8', 
                       fontSize: '0.9rem',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                      padding: '5px',
+                      borderTop: '1px solid #e0e0e0'
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Set the current date to this month
-                      const newDate = new Date(currentDate);
-                      newDate.setMonth(month.getMonth());
-                      // Show the month view for this month
-                      onDateClick(newDate);
+                      
+                      // Create a date for the first day of the month
+                      const firstDayOfMonth = new Date(currentDate.getFullYear(), month.getMonth(), 1);
+                      
+                      // Show the event list for this month with the showMonthEvents flag
+                      onDateClick(firstDayOfMonth, null, true);
                     }}
                   >
-                    +{monthEventCount - displayEvents.length} more
+                    +{monthEventCount - displayEvents.length} more events
                   </div>
                 )}
               </div>

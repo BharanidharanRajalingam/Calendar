@@ -7,53 +7,75 @@
 html, body {
   height: 100%;
   width: 100%;
-  overflow: auto
+  overflow: hidden;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.calendar-wrapper {
+  flex: 1;
+  height: 100%;
   width: 100%;
-  overflow: auto
+  overflow: hidden;
 }
 
 .calendar-container {
   flex: 1;
   width: 100%;
-  max-width: 100% !important;
+  height: 100%;
   margin: 0 !important;
+  overflow: hidden;
+}
+
+.calendar-grid {
+  flex: 1;
+  height: calc(100% - 60px); /* Adjust for header height */
   overflow: auto;
 }
 
-.calendar-day-grid,
-.calendar-week-grid,
-.calendar-month-grid,
-.calendar-year-grid {
-  min-height: 100%;
-}
-
-/* Make sure the calendar takes up the full height */
-.calendar-grid {
+/* Day View */
+.calendar-day-grid {
   height: 100%;
+  overflow: auto;
 }
 
-/* Ensure the day view takes up the full height */
 .calendar-day-column {
   height: 100%;
 }
 
-/* Ensure the week view takes up the full height */
+/* Week View */
 .calendar-week-container {
   height: 100%;
+  overflow: auto;
 }
 
-/* Ensure the month view takes up the full height */
+.calendar-week-grid {
+  min-height: 100%;
+}
+
+/* Month View */
 .calendar-month-container {
   height: 100%;
+  overflow: auto;
 }
 
-/* Ensure the year view takes up the full height */
+.calendar-month-grid {
+  min-height: 100%;
+}
+
+/* Year View */
 .calendar-year-container {
   height: 100%;
+  overflow: auto;
+}
+
+.calendar-year-grid {
+  min-height: 100%;
+  padding-bottom: 20px;
 }

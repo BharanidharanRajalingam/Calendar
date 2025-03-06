@@ -1,9 +1,9 @@
 {
     "id": 1,
     "summary": "Python Developer Interview",
-    "desc": "1st Round Technical Interview",
-    "start": "2025-03-05T10:00:00+05:30",
-    "end": "2025-03-05T11:00:00+05:30",
+    "desc": "Technical Assessment",
+    "start": "2025-03-07T10:00:00+05:30",
+    "end": "2025-03-07T11:00:00+05:30",
     "attendees": null,
     "status": null,
     "comment": null,
@@ -17,34 +17,34 @@
         "status": null,
         "candidate": {
             "id": 1,
-            "candidate_firstName": "mohan",
-            "candidate_lastName": "raj",
+            "candidate_firstName": "Rahul",
+            "candidate_lastName": "Sharma",
             "candidateGender": "male",
             "candidateComment": "",
-            "candidate_email": "mohanrajk@dataterrain.com"
+            "candidate_email": "rahul.sharma@example.com"
         },
         "handled_by": {
             "id": 3,
             "last_login": null,
-            "userEmail": "vinodhini_hr@dataterrain.com",
-            "username": "vinodhini_hr",
-            "firstName": "Vinodhini",
+            "userEmail": "priya_hr@dataterrain.com",
+            "username": "priya_hr",
+            "firstName": "Priya",
             "lastName": "HR",
             "userRole": "hr_employee"
         },
         "job_id": {
-            "id": 11,
-            "jobRequest_Title": "django developer",
+            "id": 12,
+            "jobRequest_Title": "Python developer",
             "jobRequest_Role": "software engineer",
-            "jobRequest_KeySkills": "django",
-            "jobRequest_Description": "asfffasf"
+            "jobRequest_KeySkills": "Python, Flask, Django",
+            "jobRequest_Description": "Experienced Python developer needed for backend development"
         }
     },
     "job_id": {
-        "id": 11,
-        "jobRequest_Title": "django developer",
+        "id": 12,
+        "jobRequest_Title": "Python developer",
         "jobRequest_Role": "software engineer",
-        "jobRequest_KeySkills": "django",
-        "jobRequest_Description": "asfffasf"
+        "jobRequest_KeySkills": "Python, Flask, Django",
+        "jobRequest_Description": "Experienced Python developer needed for backend development"
     }
 }

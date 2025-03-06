@@ -20,27 +20,23 @@ const CalendarHeader = ({
   const dayNumber = currentDate.getDate();
   
   // Handle direct button clicks
-  const handleDayClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleDayClick = () => {
+    console.log('Day button clicked');
     onViewChange('day');
   };
   
-  const handleWeekClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleWeekClick = () => {
+    console.log('Week button clicked');
     onViewChange('week');
   };
   
-  const handleMonthClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleMonthClick = () => {
+    console.log('Month button clicked');
     onViewChange('month');
   };
   
-  const handleYearClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleYearClick = () => {
+    console.log('Year button clicked');
     onViewChange('year');
   };
 
@@ -88,28 +84,28 @@ const CalendarHeader = ({
           <button 
             className={`calendar-view-button ${view === 'day' ? 'active' : ''}`}
             onClick={handleDayClick}
-            style={{ zIndex: 10 }}
+            type="button"
           >
             Day
           </button>
           <button 
             className={`calendar-view-button ${view === 'week' ? 'active' : ''}`}
             onClick={handleWeekClick}
-            style={{ zIndex: 10 }}
+            type="button"
           >
             Week
           </button>
           <button 
             className={`calendar-view-button ${view === 'month' ? 'active' : ''}`}
             onClick={handleMonthClick}
-            style={{ zIndex: 10 }}
+            type="button"
           >
             Month
           </button>
           <button 
             className={`calendar-view-button ${view === 'year' ? 'active' : ''}`}
             onClick={handleYearClick}
-            style={{ zIndex: 10 }}
+            type="button"
           >
             Year
           </button>

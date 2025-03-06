@@ -31,7 +31,7 @@ export const formatHeaderDate = (date, view) => {
       const year = date.getFullYear();
       
       if (startMonth === endMonth) {
-        return `${startDay} to ${endDay} ${startMonth}, ${year}`;
+        return `${startDay} ${startMonth} to ${endDay} ${startMonth}, ${year}`;
       } else {
         return `${startDay} ${startMonth} to ${endDay} ${endMonth}, ${year}`;
       }
@@ -195,11 +195,21 @@ export const formatDate = (dateString) => {
  */
 export const formatTime = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    hour12: true
-  });
+  const minutes = date.getMinutes();
+  
+  if (minutes === 0) {
+    // For times with zero minutes (e.g., 10:00 AM), return just the hour (e.g., 10 AM)
+    const hour = date.getHours() % 12 || 12; // Convert 0 to 12 for 12 AM
+    const ampm = date.getHours() < 12 ? 'AM' : 'PM';
+    return `${hour} ${ampm}`;
+  } else {
+    // For other times, use the standard format
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true
+    });
+  }
 };
 
 

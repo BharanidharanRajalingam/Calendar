@@ -18,7 +18,7 @@ import './styles/Calendar.css';
  * Main Calendar Component
  * Integrates all calendar sub-components and manages state
  */
-const Calendar = ({ title, initialView = 'month', initialDate = new Date() }) => {
+const Calendar = ({ title, initialView = 'month', initialDate = new Date(), onViewChange }) => {
   // State for calendar
   const [currentDate, setCurrentDate] = useState(initialDate);
   const [view, setView] = useState(initialView);
@@ -120,6 +120,11 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date() }) =>
     console.log('View changed to:', newView);
     setView(newView);
     
+    // Call the onViewChange prop if it exists
+    if (onViewChange) {
+      onViewChange(newView);
+    }
+    
     // Force re-render by updating the current date slightly
     const newDate = new Date(currentDate);
     newDate.setSeconds(newDate.getSeconds() + 1);
@@ -147,8 +152,28 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date() }) =>
   };
 
   // Handle date click
-  const handleDateClick = (date, hour = null) => {
+  const handleDateClick = (date, hour = null, showMonthEvents = false) => {
     const eventsForDate = getEventsForDate(events, date);
+    
+    // Special case for showing all events in a month from year view
+    if (showMonthEvents) {
+      setSelectedDate(date);
+      setShowEventList(true);
+      setShowEventPopup(false);
+      
+      // Mark all events for this month to be displayed in the list
+      setEvents(prevEvents => {
+        return prevEvents.map(event => {
+          const eventDate = new Date(event.start);
+          if (eventDate.getMonth() === date.getMonth() && 
+              eventDate.getFullYear() === date.getFullYear()) {
+            return { ...event, _filtered: true };
+          }
+          return { ...event, _filtered: false };
+        });
+      });
+      return;
+    }
     
     // If an hour is specified (for day/week view time slot clicks)
     if (hour !== null) {
@@ -158,8 +183,11 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date() }) =>
         return eventHour === hour;
       });
       
-      if (eventsForHour.length > 0) {
-        // If there are events for this hour, show the list
+      if (eventsForHour.length === 1) {
+        // If there's exactly one event, show the popup directly
+        handleEventClick(eventsForHour[0]);
+      } else if (eventsForHour.length > 1) {
+        // If there are multiple events, show the list
         setSelectedDate(date);
         setShowEventList(true);
         setShowEventPopup(false);
@@ -177,21 +205,39 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date() }) =>
       }
     } else {
       // For month/year view date clicks
-      if (eventsForDate.length > 0) {
-        // If there are events, always show the list
+      if (eventsForDate.length === 1) {
+        // If there's exactly one event, show the popup directly
+        handleEventClick(eventsForDate[0]);
+      } else if (eventsForDate.length > 1) {
+        // If there are multiple events, show the list
         setSelectedDate(date);
         setShowEventList(true);
         setShowEventPopup(false);
         
-        // Reset any filtering to show all events for this date
-        setEvents(prevEvents => {
-          return prevEvents.map(event => {
-            if (getEventsForDate([event], date).length > 0) {
-              return { ...event, _filtered: true };
-            }
-            return { ...event, _filtered: false };
+        // Check if this is a month view from year view (first day of month)
+        if (view === 'year' && date.getDate() === 1) {
+          // Mark all events for this month to be displayed in the list
+          setEvents(prevEvents => {
+            return prevEvents.map(event => {
+              const eventDate = new Date(event.start);
+              if (eventDate.getMonth() === date.getMonth() && 
+                  eventDate.getFullYear() === date.getFullYear()) {
+                return { ...event, _filtered: true };
+              }
+              return { ...event, _filtered: false };
+            });
           });
-        });
+        } else {
+          // Reset any filtering to show all events for this date
+          setEvents(prevEvents => {
+            return prevEvents.map(event => {
+              if (getEventsForDate([event], date).length > 0) {
+                return { ...event, _filtered: true };
+              }
+              return { ...event, _filtered: false };
+            });
+          });
+        }
       } else {
         // If there are no events, update the current date
         setCurrentDate(date);
@@ -230,19 +276,21 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date() }) =>
         title={title}
       />
       
-      {loading ? (
-        <div className="calendar-loading">Loading events...</div>
-      ) : error ? (
-        <div className="calendar-error">{error}</div>
-      ) : (
-        <CalendarGrid 
-          view={view}
-          currentDate={currentDate}
-          events={events}
-          onDateClick={handleDateClick}
-          onEventClick={handleEventClick}
-        />
-      )}
+      <div className="calendar-content">
+        {loading ? (
+          <div className="calendar-loading">Loading events...</div>
+        ) : error ? (
+          <div className="calendar-error">{error}</div>
+        ) : (
+          <CalendarGrid 
+            view={view}
+            currentDate={currentDate}
+            events={events}
+            onDateClick={handleDateClick}
+            onEventClick={handleEventClick}
+          />
+        )}
+      </div>
       
       {showEventPopup && (
         <CalendarEventPopup 

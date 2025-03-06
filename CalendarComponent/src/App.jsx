@@ -11,9 +11,9 @@ function App() {
   };
   
   return (
-    <div className="app-container" style={{ height: '100vh', width: '100%', padding: '20px' }}>
-      <div style={{ height: 'calc(100% - 60px)', width: '100%' }}>
-        <Calendar title="Your Todo's" initialView={view} />
+    <div className="app-container">
+      <div className="calendar-wrapper">
+        <Calendar initialView={view} onViewChange={handleViewChange} />
       </div>
     </div>
   );
