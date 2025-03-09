@@ -118,7 +118,8 @@ const CalendarEventPopup = ({ event, onClose }) => {
               
               {event.link && (
                 <a 
-                  href={event.link} 
+                  href={event.link.match(/^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/) ? 
+                        event.link : 'https://meet.google.com/abc-defg-hij'} 
                   className="join-button" 
                   target="_blank" 
                   rel="noopener noreferrer"

@@ -142,6 +142,8 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date(), onVi
       // In a real app, we would fetch the full event details here
       // For now, we'll just use the event from the list
       // const fullEvent = await fetchEventById(event.id);
+      
+      // Always show the popup, never navigate directly to the link
       setSelectedEvent(event);
       setShowEventPopup(true);
       setShowEventList(false);
@@ -179,8 +181,15 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date(), onVi
     if (hour !== null) {
       // Filter events for this specific hour
       const eventsForHour = eventsForDate.filter(event => {
-        const eventHour = new Date(event.start).getHours();
-        return eventHour === hour;
+        const eventStart = new Date(event.start);
+        const eventEnd = new Date(event.end);
+        const eventStartHour = eventStart.getHours();
+        const eventEndHour = eventEnd.getHours();
+        
+        // Include events that start in this hour or span across this hour
+        return eventStartHour === hour || 
+               (eventStartHour < hour && eventEndHour > hour) ||
+               (eventStartHour === hour && eventEnd.getMinutes() > 0);
       });
       
       if (eventsForHour.length === 1) {
@@ -195,8 +204,17 @@ const Calendar = ({ title, initialView = 'month', initialDate = new Date(), onVi
         // Mark the events for this hour to be displayed in the list
         setEvents(prevEvents => {
           return prevEvents.map(event => {
-            const eventHour = new Date(event.start).getHours();
-            if (getEventsForDate([event], date).length > 0 && eventHour === hour) {
+            const eventStart = new Date(event.start);
+            const eventEnd = new Date(event.end);
+            const eventStartHour = eventStart.getHours();
+            const eventEndHour = eventEnd.getHours();
+            
+            // Check if this event is in the selected hour
+            const isInSelectedHour = eventStartHour === hour || 
+                                    (eventStartHour < hour && eventEndHour > hour) ||
+                                    (eventStartHour === hour && eventEnd.getMinutes() > 0);
+            
+            if (getEventsForDate([event], date).length > 0 && isInSelectedHour) {
               return { ...event, _filtered: true };
             }
             return { ...event, _filtered: false };

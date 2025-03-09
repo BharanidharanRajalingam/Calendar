@@ -141,8 +141,15 @@ const CalendarGrid = ({
           {hours.map((hour, index) => {
             // Filter events that start or span this hour
             const hourEvents = processedEvents.filter(event => {
-              const { startHour, endHour, isMultiHour } = calculateEventStyles(event);
-              return startHour === index || (isMultiHour && index > startHour && index <= endHour);
+              const startTime = new Date(event.start);
+              const endTime = new Date(event.end);
+              const startHour = startTime.getHours();
+              const endHour = endTime.getHours();
+              
+              // Include events that start in this hour or span across this hour
+              return startHour === index || 
+                     (startHour < index && endHour > index) ||
+                     (startHour === index && endTime.getMinutes() > 0);
             });
 
             return (
@@ -157,31 +164,39 @@ const CalendarGrid = ({
               >
                 {/* Container for time-based positioned events */}
                 <div className="time-based-event-container">
-                  {hourEvents.map(event => {
-                    const { top, height, isMultiHour, startHour } = calculateEventStyles(event);
+                  {hourEvents.length > 0 && (() => {
+                    // Only display the first event that starts in this hour
+                    const firstEvent = hourEvents.find(event => {
+                      const { startHour } = calculateEventStyles(event);
+                      return startHour === index;
+                    });
                     
-                    // Only render events that start in this hour
-                    if (startHour !== index) return null;
+                    if (!firstEvent) return null;
+                    
+                    const { top, height, startHour } = calculateEventStyles(firstEvent);
+                    
+                    // Get the count of events for this hour
+                    const eventsInThisHour = hourEvents.length;
                     
                     return (
                       <CalendarEvent 
-                        key={event.id}
-                        event={event} 
+                        key={firstEvent.id}
+                        event={firstEvent} 
                         onClick={() => {
                           onDateClick(currentDate, index);
                         }}
-                        eventCount={hourEvents.length > 1 ? hourEvents.length : null}
+                        eventCount={eventsInThisHour > 1 ? eventsInThisHour : null}
                         isTimeBasedPositioning={true}
                         style={{
                           top: `${top}px`,
                           height: `${height}px`,
                           padding: '4px 8px'
                         }}
-                        width={event.width}
-                        left={event.left}
+                            width="95%"
+                            left="0%"
                       />
                     );
-                  })}
+                  })()}
                 </div>
               </div>
             );
@@ -240,8 +255,15 @@ const CalendarGrid = ({
                 
                 // Filter events that start or span this hour
                 const hourEvents = dayEvents.filter(event => {
-                  const { startHour, endHour, isMultiHour } = calculateEventStyles(event);
-                  return startHour === hourIndex || (isMultiHour && hourIndex > startHour && hourIndex <= endHour);
+                  const startTime = new Date(event.start);
+                  const endTime = new Date(event.end);
+                  const startHour = startTime.getHours();
+                  const endHour = endTime.getHours();
+                  
+                  // Include events that start in this hour or span across this hour
+                  return startHour === hourIndex || 
+                         (startHour < hourIndex && endHour > hourIndex) ||
+                         (startHour === hourIndex && endTime.getMinutes() > 0);
                 });
 
                 return (
@@ -256,31 +278,39 @@ const CalendarGrid = ({
                   >
                     {/* Container for time-based positioned events */}
                     <div className="time-based-event-container">
-                      {hourEvents.map(event => {
-                        const { top, height, isMultiHour, startHour } = calculateEventStyles(event);
+                      {hourEvents.length > 0 && (() => {
+                        // Only display the first event that starts in this hour
+                        const firstEvent = hourEvents.find(event => {
+                          const { startHour } = calculateEventStyles(event);
+                          return startHour === hourIndex;
+                        });
                         
-                        // Only render events that start in this hour
-                        if (startHour !== hourIndex) return null;
+                        if (!firstEvent) return null;
+                        
+                        const { top, height, startHour } = calculateEventStyles(firstEvent);
+                        
+                        // Get the count of events for this hour
+                        const eventsInThisHour = hourEvents.length;
                         
                         return (
                           <CalendarEvent 
-                            key={event.id}
-                            event={event} 
+                            key={firstEvent.id}
+                            event={firstEvent} 
                             onClick={() => {
                               onDateClick(day, hourIndex);
                             }}
-                            eventCount={hourEvents.length > 1 ? hourEvents.length : null}
+                            eventCount={eventsInThisHour > 1 ? eventsInThisHour : null}
                             isTimeBasedPositioning={true}
                             style={{
                               top: `${top}px`,
                               height: `${height}px`,
                               padding: '4px 8px'
                             }}
-                            width={event.width}
-                            left={event.left}
+                            width="95%"
+                            left="0%"
                           />
                         );
-                      })}
+                      })()}
                     </div>
                   </div>
                 );

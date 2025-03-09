@@ -196,6 +196,7 @@ button:focus{
   border-bottom: 1px solid #e0e0e0;
   background-color: #f9f9f9;
   cursor: pointer;
+  border-right: 1px solid #e0e0e0;
 }
 
 .calendar-week-header.today {
@@ -213,6 +214,7 @@ button:focus{
   text-align: center;
   font-size: 0.8rem;
   color: #666;
+  border-right: 1px solid #e0e0e0;
 }
 
 .calendar-week-cell {

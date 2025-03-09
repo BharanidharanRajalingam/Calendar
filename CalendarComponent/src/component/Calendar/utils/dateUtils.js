@@ -9,12 +9,11 @@
  * @returns {string} Formatted date string
  */
 export const formatHeaderDate = (date, view) => {
-  const options = { timeZone: 'UTC' };
+  // Remove the timeZone option to use the local time zone
   
   switch (view) {
     case 'day':
       return date.toLocaleDateString('en-US', { 
-        ...options,
         weekday: 'long', 
         day: 'numeric', 
         month: 'long', 
@@ -26,8 +25,8 @@ export const formatHeaderDate = (date, view) => {
       
       const startDay = startOfWeek.getDate();
       const endDay = endOfWeek.getDate();
-      const startMonth = startOfWeek.toLocaleDateString('en-US', { ...options, month: 'long' });
-      const endMonth = endOfWeek.toLocaleDateString('en-US', { ...options, month: 'long' });
+      const startMonth = startOfWeek.toLocaleDateString('en-US', { month: 'long' });
+      const endMonth = endOfWeek.toLocaleDateString('en-US', { month: 'long' });
       const year = date.getFullYear();
       
       if (startMonth === endMonth) {
@@ -36,7 +35,7 @@ export const formatHeaderDate = (date, view) => {
         return `${startDay} ${startMonth} to ${endDay} ${endMonth}, ${year}`;
       }
     case 'month':
-      return date.toLocaleDateString('en-US', { ...options, month: 'long', year: 'numeric' });
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     case 'year':
       return date.getFullYear().toString();
     default:
@@ -233,7 +232,12 @@ export const groupEventsByDate = (events) => {
   
   events.forEach(event => {
     const eventDate = new Date(event.start);
-    const dateKey = eventDate.toISOString().split('T')[0];
+    
+    // Create a date string in YYYY-MM-DD format using local time
+    const year = eventDate.getFullYear();
+    const month = String(eventDate.getMonth() + 1).padStart(2, '0');
+    const day = String(eventDate.getDate()).padStart(2, '0');
+    const dateKey = `${year}-${month}-${day}`;
     
     if (!grouped[dateKey]) {
       grouped[dateKey] = [];
@@ -252,7 +256,12 @@ export const groupEventsByDate = (events) => {
  * @returns {number} Number of events on the date
  */
 export const getEventCountForDate = (events, date) => {
-  const dateKey = date.toISOString().split('T')[0];
+  // Create a date string in YYYY-MM-DD format using local time
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const dateKey = `${year}-${month}-${day}`;
+  
   const groupedEvents = groupEventsByDate(events);
   
   return groupedEvents[dateKey] ? groupedEvents[dateKey].length : 0;
@@ -265,7 +274,12 @@ export const getEventCountForDate = (events, date) => {
  * @returns {Array} Events on the date
  */
 export const getEventsForDate = (events, date) => {
-  const dateKey = date.toISOString().split('T')[0];
+  // Create a date string in YYYY-MM-DD format using local time
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const dateKey = `${year}-${month}-${day}`;
+  
   const groupedEvents = groupEventsByDate(events);
   
   return groupedEvents[dateKey] || [];

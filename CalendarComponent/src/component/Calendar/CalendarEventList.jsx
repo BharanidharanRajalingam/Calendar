@@ -42,7 +42,12 @@ const CalendarEventList = ({ date, events, onEventClick, onClose }) => {
     <div className="event-popup-overlay" onClick={onClose}>
       <div className="event-list" onClick={(e) => e.stopPropagation()}>
         <div className="event-list-header">
-          <h3>Meetings</h3>
+          <h3>
+            {!isMonthView && filteredEvents.length > 0 && filteredEvents[0]._filtered && 
+             new Date(filteredEvents[0].start).getHours() === new Date(filteredEvents[0].start).getHours() ? 
+              `Meetings at ${formatTime(filteredEvents[0].start)}` : 
+              'Meetings'}
+          </h3>
           <button 
             className="event-list-close" 
             onClick={onClose}
@@ -91,7 +96,10 @@ const CalendarEventList = ({ date, events, onEventClick, onClose }) => {
               <div 
                 key={event.id} 
                 className="event-list-item"
-                onClick={() => onEventClick(event)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEventClick(event);
+                }}
                 style={{ 
                   borderLeft: '5px solid ' + backgroundColor,
                   padding: '12px 16px',
